@@ -1,7 +1,18 @@
 # Demo deployment runbook
 
-Status: prepared locally only. No cloud account, paid resource, registry upload or public
-deployment has been created. Obtain the owner's approval before those actions.
+Status: deployed and externally verified on 2026-10-22 with owner approval.
+
+- Repository: https://github.com/anishchauhan16/intentops
+- Demo: https://intentops-demo.onrender.com
+- API docs: https://intentops-demo.onrender.com/docs
+- Initial deployed commit: `f1daf7629be9cabe9c496d7e1368c31faba02098`.
+- Render Free, Docker, Singapore, `/health`, PORT=10000, threshold 0.70, semantic mode off.
+  The owner confirmed Auto-Deploy Off was saved. No paid compute was created.
+- Native amd64 [CI](https://github.com/anishchauhan16/intentops/actions/runs/39729975061)
+  passed, followed by external `scripts/verify_service.py` checks against the live URL.
+
+The instructions below reproduce the deployment. Additional public deployments,
+new account creation or paid resources require the owner's approval.
 
 ## Hosting choice
 
@@ -53,8 +64,8 @@ Check `curl -fsS http://localhost:8000/health` and a browser prediction. Inspect
 sufficient. Docker must be installed and running. On 2026-10-22, native Linux arm64
 container health/inference passed under these limits (137.3 MiB in one post-test
 sample, not a peak/load measurement). The amd64 build succeeds, but local QEMU crashes
-during sklearn import on Apple Silicon. Use the native architecture locally; require
-Ubuntu amd64 CI and hosted smoke checks before claiming target deployment verification.
+during sklearn import on Apple Silicon. Use the native architecture locally. Native
+Ubuntu amd64 CI and hosted smoke checks on 2026-10-22 subsequently passed for this release.
 
 ## Prepare a reviewable release without uploading
 
@@ -72,8 +83,10 @@ intentionally permits its frozen public-data baseline and metadata.
 
 ## Publish only after approval
 
-The following steps upload source/artifacts and create a public endpoint. They have
-not been executed. No secret or API token is required by the application.
+The following steps upload source/artifacts and create a public endpoint. They describe
+the completed initial deployment and how to reproduce it. No secret or API token is
+required by the application. The release manifest's `prepared_locally_only` value
+describes the packaging operation, not current hosting status; see the status above.
 
 1. Review `demo-release/release.json`. After approval, create a GitHub repository for
    this deployment bundle. A private source repository is sufficient for a public demo.

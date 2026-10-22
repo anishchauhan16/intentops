@@ -48,9 +48,19 @@ raw-data manifest and saved evaluation/benchmark outputs.
 - Follow-up on 2026-10-22 installed Docker Desktop and verified a native Linux arm64
   container at 512 MiB / 0.5 CPU with a read-only root, UID 10001 and healthy readiness.
   All service smoke checks passed; one post-smoke memory sample was 137.3 MiB.
-- The amd64 image builds, but QEMU on this Apple Silicon host crashes during sklearn
-  import even without resource constraints. Native amd64 CI/hosting and public
-  cold-start/concurrent-load behavior remain unverified.
+- The amd64 image crashes during sklearn import under local QEMU on this Apple Silicon
+  host, even without resource constraints. Follow-up native Ubuntu amd64
+  [CI run](https://github.com/anishchauhan16/intentops/actions/runs/39729975061) passed all
+  71 tests (98.74% branch-aware coverage), Ruff, mypy, Docker build and constrained
+  container readiness/inference. No dependency/model change was required.
+- After owner approval, published [the repository](https://github.com/anishchauhan16/intentops)
+  and deployed commit `f1daf7629be9cabe9c496d7e1368c31faba02098` to
+  [Render Free](https://intentops-demo.onrender.com/) on 2026-10-22. The external
+  verification script passed health, metadata/model identity, accepted/review predictions,
+  input/batch validation, demo HTML/CSS/docs and form decisions. The owner confirmed
+  Auto-Deploy Off was saved. No paid compute was created.
+- Hosted cold-start distribution, peak memory, concurrency and load performance remain
+  unmeasured. In-process benchmark numbers must not be presented as hosted latency.
 - `requirements-runtime.txt` pins Python dependencies; the Python base tag is pinned to
   a patch release, not an immutable OCI digest. Record an image digest after the approved
   build and review security updates periodically.

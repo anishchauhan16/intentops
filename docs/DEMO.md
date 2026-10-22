@@ -1,7 +1,9 @@
 # Recruiter walkthrough (60 seconds)
 
-Start locally: `source .venv/bin/activate && python -m intentops.serve` and open
-`http://localhost:8000/`. A future public URL must be verified before it is shared.
+Open [the live demo](https://intentops-demo.onrender.com/) before the interview to let
+the free instance wake. Public health, inference and demo-form checks passed on
+2026-10-22. Locally, run `source .venv/bin/activate && python -m intentops.serve` and open
+`http://localhost:8000/`.
 
 | Time | Action and narration |
 | --- | --- |
@@ -23,7 +25,8 @@ encoders. No real hybrid quality improvement has been measured in the shipped de
 
 - **SWE:** Built a typed FastAPI support-routing service with a server-rendered demo,
   bounded request validation, model-readiness checks, structured privacy-conscious logs,
-  71 offline regression tests, CI, and a non-root Docker deployment configuration.
+  71 offline regression tests and GitHub Actions CI; deployed and verified a non-root
+  Docker image on Render.
 - **AI Engineer:** Implemented a 77-intent banking router with TF-IDF/logistic regression,
   configurable human-review gating and optional local embedding retrieval; measured
   99.00% accepted accuracy at 45.36% coverage on the official BANKING77 test split.
@@ -32,5 +35,5 @@ encoders. No real hybrid quality improvement has been measured in the shipped de
   threshold analysis; achieved 87.63% accuracy, 0.8772 macro F1 and 96.17% top-3 accuracy
   on 3,080 held-out examples.
 
-These bullets describe implemented and measured work. They intentionally make no claim
-of public deployment, production traffic, semantic quality gains or business impact.
+These bullets describe implemented and measured work. They make no claim of production
+traffic, semantic quality gains or business impact.

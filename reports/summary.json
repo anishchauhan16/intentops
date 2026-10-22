@@ -1,5 +1,5 @@
 {
-  "status": "verified_local_only",
+  "status": "deployed_and_functionally_verified",
   "model_version": "baseline-c8f5bc42f4b0",
   "model_sha256": "c8f5bc42f4b07bd5c49e71263059d0742e967cbcdbb750842a32868c8910e595",
   "model_bytes": 5697572,
@@ -67,7 +67,28 @@
     "dependency_check": "No broken requirements found.",
     "memory_sample": "137.3MiB / 512MiB",
     "memory_sample_scope": "one post-smoke sample, not peak or concurrent-load measurement",
-    "amd64_status": "image builds; local QEMU crashes during sklearn import; native amd64 CI/hosting verification pending",
+    "amd64_status": "native Ubuntu amd64 GitHub Actions Docker build, health and inference passed; local Apple Silicon QEMU import crash remains an emulation limitation",
     "date": "2026-10-22"
+  },
+  "hosted_verification": {
+    "status": "passed",
+    "base_url": "https://intentops-demo.onrender.com",
+    "model_version": "baseline-c8f5bc42f4b0",
+    "checks": [
+      "health",
+      "metadata",
+      "accepted_prediction",
+      "uncertain_and_ambiguous_review",
+      "validation_and_batch",
+      "browser_form_assets_docs_and_decisions"
+    ],
+    "scope": "functional HTTP verification; not a latency/load benchmark",
+    "date": "2026-10-22",
+    "platform": "Render Free Docker web service",
+    "region": "Singapore",
+    "repository_url": "https://github.com/anishchauhan16/intentops",
+    "initial_deployed_commit": "f1daf7629be9cabe9c496d7e1368c31faba02098",
+    "ci_url": "https://github.com/anishchauhan16/intentops/actions/runs/39729975061",
+    "auto_deploy": "off; owner confirmed saved"
   }
 }

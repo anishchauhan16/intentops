@@ -1,7 +1,13 @@
 # Final publication review
 
-Status: local candidate only. No remote repository was created or pushed and no Render
-service was created. Public publication and deployment await the owner's explicit approval.
+Status: published and deployed with owner approval on 2026-10-22.
+
+- Public repository: https://github.com/anishchauhan16/intentops
+- Live demo: https://intentops-demo.onrender.com
+- Successful native amd64 CI: https://github.com/anishchauhan16/intentops/actions/runs/39729975061
+- Initial deployed commit: `f1daf7629be9cabe9c496d7e1368c31faba02098`.
+- External functional verification passed using `scripts/verify_service.py` and the
+  unchanged model version `baseline-c8f5bc42f4b0`. No hosted latency benchmark was run.
 
 ## Candidate
 
@@ -10,7 +16,7 @@ service was created. Public publication and deployment await the owner's explici
 - Proposed description: “77-class banking intent routing with FastAPI, human-review
   gating, reproducible evaluation, and a Docker demo.”
 - Publication/build context: the allowlisted `demo-release/` directory.
-- Proposed source license: MIT; separate BANKING77 attribution in `NOTICE.md`.
+- Source license: MIT; separate BANKING77 attribution in `NOTICE.md`.
 - Baseline: `baseline-c8f5bc42f4b0`, SHA-256 recorded in artifact metadata and release.json.
 - Default deployment: one Render Free Docker web service, no paid resources, no secrets,
   no persistent disk, semantic mode disabled, PORT=10000, readiness `/health`, auto-deploy off.
@@ -36,7 +42,7 @@ service was created. Public publication and deployment await the owner's explici
   mismatched bundles; it is not publisher authentication. The model contains vocabulary
   derived from public BANKING77 data, not private customer requests.
 
-## Verified and pending checks
+## Verification evidence
 
 - Ruff, formatter and mypy pass; 71 offline tests pass with 98.74% branch-aware coverage.
 - Existing artifact checksum, size, metrics and routing counts match the saved reports.
@@ -56,13 +62,14 @@ service was created. Public publication and deployment await the owner's explici
   and UID 10001 verification with a read-only root, 512 MiB and 0.5 CPU. One post-smoke
   memory sample was 137.3 MiB. Disposable verification containers were removed.
 - The amd64 runtime crashed during sklearn import under local QEMU, including without
-  resource constraints. Native Ubuntu amd64 CI and hosted inference must pass before
-  asserting target-platform verification. No model/dependency change hid this failure.
+  resource constraints. Native Ubuntu amd64 CI and hosted inference subsequently passed.
+  No model/dependency change hid this local emulation failure.
 - GitHub CLI authentication is verified as `anishchauhan16`; an authenticated repository
-  lookup found no existing `anishchauhan16/intentops` repository. Creation, public push,
-  hosted CI and Render deployment remain pending approval. No hosted checks are reported
-  as passing.
+  lookup found no existing `anishchauhan16/intentops` repository before its creation.
+  After explicit approval, created the public repository and pushed the reviewed release.
+  The owner separately approved the GitHub `workflow` scope required to upload CI.
 - README screenshots show the actual running local application with a fictional PIN
   request. The visible single-request timing is not a benchmark.
-- Record the real repository/endpoint URLs and deployment verification only after they
-  exist. Permission cleanup remains the final handoff step after deployment work.
+- Render service `intentops-demo` uses Docker, Free compute, `/health`, PORT=10000,
+  threshold 0.70 and semantic mode disabled. The owner confirmed Auto-Deploy Off was saved.
+  No paid compute, database or disk was added. Permission cleanup is the final handoff.

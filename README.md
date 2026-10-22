@@ -2,8 +2,13 @@
 
 **77 intents · 87.63% test accuracy · 0.8772 macro F1 · 71 passing offline tests**
 
-**Status: verified locally; public deployment pending approval.**
-Try the browser demo at `http://localhost:8000/` after starting the app.
+**Live demo: [intentops-demo.onrender.com](https://intentops-demo.onrender.com)** ·
+[API docs](https://intentops-demo.onrender.com/docs) ·
+[passing CI](https://github.com/anishchauhan16/intentops/actions)
+
+Deployed and functionally verified on Render Free on 2026-10-22. The service sleeps
+when idle; allow about a minute for the first request. Use fictional messages only.
+You can also run the browser demo at `http://localhost:8000/`.
 [60-second walkthrough and resume bullets](docs/DEMO.md) ·
 [deployment runbook](docs/DEPLOYMENT.md) · [audit](docs/AUDIT.md)
 
@@ -47,8 +52,9 @@ flowchart LR
 The readiness audit passed **71 offline tests with 98.74% branch-aware coverage**,
 Ruff and mypy in both the working environment and a fresh non-editable installation.
 Fresh training/evaluation reproduced the saved quality metrics. The Linux arm64
-container passed constrained local smoke checks. Native amd64 CI and public hosting
-verification remain pending; see the [audit evidence](docs/AUDIT.md).
+container passed constrained local smoke checks. Native Ubuntu amd64 CI also passed
+Docker build, health and inference checks, and the Render endpoint passed external
+functional checks; see the [audit evidence](docs/AUDIT.md).
 The release CI also builds and smoke-tests the frozen Docker image when its artifacts
 are present. It performs no production training or dataset/model downloads.
 
@@ -80,9 +86,9 @@ tests/            # Synthetic fixtures; no model/data downloads
 data/raw/         # Generated train/test Parquet and manifest
 artifacts/        # Generated baseline.joblib, metadata.json, optional semantic.npz
 reports/          # Generated results; README.md documents report schemas
-docs/             # Audit, approval-gated hosting runbook, demo and resume bullets
+docs/             # Audit, hosting runbook, demo and resume bullets
 requirements-runtime.txt  # Frozen baseline-compatible runtime dependencies
-render.yaml       # Prepared free-plan configuration; not applied
+render.yaml       # Reference configuration matching the manually created free service
 .github/workflows/ci.yml
 ```
 
@@ -99,8 +105,20 @@ python -m intentops.serve
 ```
 
 Open `http://localhost:8000/`. Use the example links, submit a prediction, and inspect
-the review flag and alternatives. For a clean source checkout, create a new environment,
-install the pinned runtime and fetch/train the artifacts:
+the review flag and alternatives. The public repository includes the frozen baseline;
+a fresh checkout needs no training or dataset download:
+
+```bash
+git clone https://github.com/anishchauhan16/intentops.git
+cd intentops
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-runtime.txt .
+python -m intentops.serve
+```
+
+To reproduce training separately, install the development/data extras and fetch the
+public data. Use a separate checkout to preserve the deployed frozen artifacts:
 
 ```bash
 python3.11 -m venv .venv
@@ -321,9 +339,9 @@ and encoder cache. Raw data, tests, notebooks, secrets and caches are excluded.
 The loader rejects a different sklearn version before deserialization. Runtime pins
 and artifacts must be updated together; these pins are not a universal lockfile.
 
-The simplest public-demo option is one Render Free Docker web service. The 5.43 MiB
-baseline needs CPU only. A local model-load process peaked at 187.7 MiB; Linux container
-memory and concurrency still need verification. Render Free provides 512 MB RAM /
+The public demo uses one Render Free Docker web service. The 5.43 MiB
+baseline needs CPU only. A local model-load process peaked at 187.7 MiB; this does not
+measure hosted memory or concurrent-load behavior. Render Free provides 512 MB RAM /
 0.1 CPU ([specs](https://render.com/docs/compute-plans)), but sleeps after 15 idle minutes,
 has cold starts and usage limits ([limits](https://render.com/docs/free)). An always-on
 0.5 CPU / 512 MB instance is listed at $7/month as of 2026-10-21
@@ -333,12 +351,14 @@ has cold starts and usage limits ([limits](https://render.com/docs/free)). An al
 the frozen baseline, aggregate metrics and deployable source. It uploads nothing.
 See [exact deployment steps](docs/DEPLOYMENT.md) for repository handoff, health checks,
 environment settings, secrets handling, Docker resource checks and live URL verification.
-`render.yaml` is prepared configuration only. On 2026-10-22, the Linux arm64 image passed
-health and inference checks with a read-only root, UID 10001, 512 MiB RAM and 0.5 CPU.
+`render.yaml` is a reference; the service was created manually. On 2026-10-22, the Linux
+arm64 image passed health and inference checks with a read-only root, UID 10001,
+512 MiB RAM and 0.5 CPU.
 One post-test memory sample was 137.3 MiB; this was not a peak/load measurement. The
-amd64 image builds, but local QEMU crashes during sklearn import on Apple Silicon;
-native amd64 CI/hosting validation remains required. No cloud signup, paid resource
-or public deployment is claimed.
+amd64 image crashes during sklearn import under local QEMU on Apple Silicon, but
+[native Ubuntu amd64 CI](https://github.com/anishchauhan16/intentops/actions/runs/39729975061)
+passed Docker readiness/inference and the live Render service passed the same functional
+verification script. No paid compute was created; hosted load/latency was not benchmarked.
 
 ## Provenance, privacy and limitations
 
