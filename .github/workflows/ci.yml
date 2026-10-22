@@ -1,0 +1,53 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements-runtime.txt -e ".[dev]"
+      - run: python -m ruff check .
+      - run: python -m ruff format --check .
+      - run: python -m mypy
+      - run: python -m pytest
+        env:
+          HF_HUB_OFFLINE: "1"
+          TRANSFORMERS_OFFLINE: "1"
+      - name: Build frozen demo container when release artifacts are present
+        if: hashFiles('artifacts/baseline.joblib') != ''
+        run: docker build -t intentops:ci .
+      - name: Start constrained demo container
+        if: hashFiles('artifacts/baseline.joblib') != ''
+        run: >-
+          docker run -d --name intentops-ci --memory 512m --cpus 0.5
+          --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m
+          --cap-drop ALL --security-opt no-new-privileges
+          -e PORT=8000 -p 127.0.0.1:8000:8000 intentops:ci
+      - name: Verify container readiness and inference
+        if: hashFiles('artifacts/baseline.joblib') != ''
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:8000/health; then break; fi
+            sleep 2
+          done
+          python - <<'PY'
+          import json
+          from scripts.verify_service import verify_service
+          with open("artifacts/metadata.json") as stream:
+              version = json.load(stream)["model_version"]
+          print(json.dumps(verify_service("http://127.0.0.1:8000", version), indent=2))
+          PY
+      - name: Show container state and clean up
+        if: always() && hashFiles('artifacts/baseline.joblib') != ''
+        run: |
+          docker inspect --format '{{json .State}}' intentops-ci || true
+          docker logs intentops-ci || true
+          docker rm -f intentops-ci || true

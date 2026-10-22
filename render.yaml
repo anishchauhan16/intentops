@@ -1,0 +1,16 @@
+# PREPARED ONLY: applying a Blueprint creates a public service. Approval required first.
+services:
+  - type: web
+    name: intentops-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: INTENTOPS_REVIEW_THRESHOLD
+        value: "0.70"
+      - key: INTENTOPS_SEMANTIC_ENABLED
+        value: "false"

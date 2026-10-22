@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IntentOps · Support routing demo</title>
+  <link rel="stylesheet" href="/static/demo.css">
+</head>
+<body>
+<main>
+  <nav><a class="brand" href="/">IntentOps<span> / Banking support</span></a>
+    <a href="/docs">API docs ↗</a></nav>
+  <header>
+    <div class="eyebrow">77 intents · Local CPU inference</div>
+    <h1>The right queue.<br>A human when it matters.</h1>
+    <p class="intro">Try a banking support message. See the predicted intent,
+      classifier confidence, and whether it crosses the human review threshold.</p>
+  </header>
+  <div class="workspace">
+    <section class="input-panel">
+      <h2>Route a request</h2>
+      <p>Use a fictional message. Do not enter account numbers or personal information.</p>
+      <form method="post" action="/demo">
+        <label for="text">Support message</label>
+        <textarea id="text" name="text" rows="5" minlength="1" maxlength="2000"
+          required placeholder="How do I change my PIN?">$form_text</textarea>
+        <button type="submit">Predict intent <span aria-hidden="true">→</span></button>
+      </form>
+      $error_block
+      <div class="examples"><span>Try an example</span>
+        <a href="/?example=pin">Change a PIN</a>
+        <a href="/?example=card">A card that hasn’t arrived</a>
+        <a href="/?example=unclear">An unclear request</a>
+      </div>
+    </section>
+    <aside>
+      <div class="eyebrow">How the decision works</div>
+      <h2>Confidence has a threshold.</h2>
+      <p>A TF-IDF and logistic regression pipeline ranks the intents. Below the
+        configured <strong>$threshold</strong> acceptance threshold, the request needs review.</p>
+      <p>The optional semantic mode can consult nearby training examples. The classifier
+        probability remains separate from the retrieval vote.</p>
+      <a href="/metadata">Inspect model metadata ↗</a>
+      <div class="model"><span>Loaded model</span><code>$model_version</code></div>
+    </aside>
+  </div>
+  $result_block
+  <footer>Portfolio demonstration · English banking requests · No real banking actions
+    <p>Messages are processed in memory and are not stored or logged by the application.
+      Hosting infrastructure may have separate logging policies.</p></footer>
+</main>
+</body>
+</html>

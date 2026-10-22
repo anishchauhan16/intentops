@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.*_cache/
+.env
+.env.*
+!.env.example
+data/raw/*
+.coverage*
+*.egg-info/
+demo-release/

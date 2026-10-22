@@ -1,0 +1,16 @@
+# Allow only the runtime source, pinned dependencies, and two reviewed artifacts.
+**
+!Dockerfile
+!pyproject.toml
+!README.md
+!LICENSE
+!NOTICE.md
+!requirements-runtime.txt
+!src/
+!src/intentops/
+!src/intentops/**
+!artifacts/
+!artifacts/baseline.joblib
+!artifacts/metadata.json
+**/__pycache__/
+**/*.pyc
