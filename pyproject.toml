@@ -55,5 +55,5 @@ disallow_untyped_defs = true
 warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
-module = ["sklearn.*", "joblib", "datasets", "sentence_transformers", "transformers.*", "threadpoolctl"]
+module = ["sklearn.*", "joblib", "datasets", "sentence_transformers", "transformers.*", "torch", "threadpoolctl"]
 ignore_missing_imports = true
