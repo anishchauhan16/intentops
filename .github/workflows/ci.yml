@@ -51,3 +51,20 @@ jobs:
           docker inspect --format '{{json .State}}' intentops-ci || true
           docker logs intentops-ci || true
           docker rm -f intentops-ci || true
+
+  transformer-offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install "torch>=2.6,<3" --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install -r requirements-runtime.txt -e ".[dev,transformer]"
+      - run: python -m pytest
+        env:
+          HF_HUB_OFFLINE: "1"
+          TRANSFORMERS_OFFLINE: "1"
+          HF_DATASETS_OFFLINE: "1"

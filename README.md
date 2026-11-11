@@ -1,6 +1,6 @@
 # IntentOps — ML-Powered Intent Classification & Human-Review Routing
 
-**77 intents · 87.63% test accuracy · 0.8772 macro F1 · 71 passing offline tests**
+**77 intents · 87.63% test accuracy · 0.8772 macro F1 · 88 passing offline tests with optional extra**
 
 **Live demo: [intentops-demo.onrender.com](https://intentops-demo.onrender.com)** ·
 [API docs](https://intentops-demo.onrender.com/docs) ·
@@ -313,6 +313,40 @@ has no presumed quality benefit. Account for coverage and latency as well as acc
 The encoder is lazy-loaded and uses local cached weights during serving/evaluation;
 only the explicit semantic build permits a download. Keep that cache available to
 the serving user. No Sentence Transformer weights are downloaded in tests or CI.
+
+## Optional transformer experiment (Phase 1)
+
+An independent `distilbert-base-uncased` fine-tuning path is available through
+`.[transformer]`. **The deployed API still uses the frozen TF-IDF baseline.**
+Both columns below were evaluated in one frozen final run on all 3,080 official test
+examples on 2026-11-10; the baseline was loaded, never retrained.
+
+| Measure | Frozen baseline | Fine-tuned DistilBERT |
+| --- | ---: | ---: |
+| Test accuracy | 87.63% | 88.96% |
+| Macro F1 | 0.8772 | 0.8885 |
+| Weighted F1 | 0.8772 | 0.8885 |
+| Top-3 accuracy | 96.17% | 97.08% |
+| Coverage at 0.70 | 45.36% | 73.77% |
+| Accepted accuracy at 0.70 | 99.00% | 97.62% |
+| CPU batch 1, mean / p95 ms per example | 0.1905 / 0.2041 | 5.8125 / 6.0554 |
+| CPU batch 16, mean / p95 ms per example | 0.0159 / 0.0162 | 3.0748 / 4.7886 |
+| Artifact bundle size | 5.51 MiB | 256.56 MiB |
+| Training time | PENDING | 356.66 s |
+| Training hardware | PENDING | Apple M5 CPU, 2 threads |
+
+CPU timings use identical examples, one thread, batch sizes 1/16 and excluded warmups.
+Batch-16 p95 is amortized batch time per example, not request/network tail latency.
+Bundles include preprocessing/tokenizer and metadata. Full training used 8,002 rows,
+2,001 validation rows, seed 42 and three epochs; epoch 3 was selected on validation.
+
+The transformer improves overall accuracy and coverage, while accepted accuracy at the
+same gate is lower and CPU latency/model size are higher. No calibration or business
+impact claim follows from these results. Baseline training duration/hardware are unknown.
+
+[Reproduction, methodology and limitations](docs/transformer.md) ·
+[Full comparison](reports/transformer_vs_baseline.md) ·
+[Measured JSON evidence](reports/transformer_vs_baseline.json)
 
 ## Deployment
 

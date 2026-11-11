@@ -9,3 +9,11 @@ data/raw/*
 .coverage*
 *.egg-info/
 demo-release/
+artifacts/transformer*/
+artifacts/.transformer*/
+.hf-cache/
+reports/transformer/
+*.safetensors
+*.pt
+*.pth
+*.bin
