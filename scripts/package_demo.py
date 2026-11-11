@@ -33,6 +33,10 @@ def package_demo(root: Path, output: Path) -> list[str]:
         "reports/summary.json",
     ]
     paths = [root / name for name in roots]
+    # Optional aggregate comparison reports contain no example text or model weights.
+    for name in ("reports/transformer_vs_baseline.json", "reports/transformer_vs_baseline.md"):
+        if (root / name).exists():
+            paths.append(root / name)
     for directory, pattern in (
         ("src/intentops", "*.py"),
         ("src/intentops/templates", "*.html"),
@@ -55,6 +59,8 @@ def package_demo(root: Path, output: Path) -> list[str]:
     (output / ".gitignore").write_text(
         ".venv/\n__pycache__/\n*.pyc\n.*_cache/\n.env\n.env.*\n!.env.example\n"
         "data/raw/*\n.coverage*\n*.egg-info/\ndemo-release/\n"
+        "artifacts/transformer*/\nartifacts/.transformer*/\n.hf-cache/\n"
+        "reports/transformer/\n*.safetensors\n*.pt\n*.pth\n*.bin\n"
     )
     (output / "release.json").write_text(
         json.dumps(

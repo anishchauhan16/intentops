@@ -62,11 +62,19 @@ def test_release_excludes_local_secrets_raw_data_and_caches(
     shutil.copytree(artifact_dir, root / "artifacts")
     (root / ".env").write_text("PRIVATE_TOKEN=synthetic-secret")
     (root / "artifacts/semantic.npz").write_bytes(b"large optional artifact")
+    (root / "artifacts/transformer").mkdir()
+    (root / "artifacts/transformer/model.safetensors").write_bytes(b"excluded checkpoint")
+    (root / "reports/transformer_vs_baseline.json").write_text('{"status": "synthetic"}')
+    (root / "reports/transformer_vs_baseline.md").write_text("Synthetic aggregate comparison")
     output = tmp_path / "release"
     package_demo(root, output)
     assert (output / "artifacts/baseline.joblib").exists()
     assert not (output / ".env").exists()
     assert not (output / "artifacts/semantic.npz").exists()
+    assert not (output / "artifacts/transformer").exists()
+    assert (output / "reports/transformer_vs_baseline.json").is_file()
+    assert (output / "reports/transformer_vs_baseline.md").is_file()
+    assert "artifacts/transformer*/" in (output / ".gitignore").read_text()
     assert not (output / ".venv").exists()
     assert (
         json.loads((output / "release.json").read_text())["deployment_status"]
