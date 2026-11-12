@@ -314,6 +314,32 @@ The encoder is lazy-loaded and uses local cached weights during serving/evaluati
 only the explicit semantic build permits a download. Keep that cache available to
 the serving user. No Sentence Transformer weights are downloaded in tests or CI.
 
+## Optional local LLM/RAG pilot (Phase 2)
+
+An isolated `.[llm]` experiment adds a bounded LangGraph with Chroma retrieval over
+the 8,002 fitting examples and 77 authored intent descriptions, using pinned local
+MiniLM embeddings and a digest-verified Qwen2.5 7B model through Ollama. It uses no
+hosted inference or API keys. The serving API and deployed demo keep the baseline.
+
+See [setup, data boundaries and reproduction](docs/llm-rag.md). The pilot is limited
+to 250 validation rows after a 20-row latency smoke gate. Similarity threshold τ
+selection, full validation and official-test evaluation require a later approved step.
+
+Measured exploratory results on the **same 250 validation rows**, covering 77 intents:
+
+| Path | Accuracy | Macro F1 | Weighted F1 |
+| --- | ---: | ---: | ---: |
+| Frozen baseline | 84.8% | 0.8318 | 0.8363 |
+| Frozen transformer | 88.4% | 0.8754 | 0.8820 |
+| Local LLM/RAG | 90.8% | 0.8977 | 0.9015 |
+
+The pilot had 230 live calls and 20 response-cache hits, with no invalid outputs.
+Live local end-to-end latency was 2.452 s mean / 3.599 s p95 on Apple M5 / 16 GiB.
+The agreement-only diagnostic was 197/201 correct (98.01%) at 80.4% candidate coverage;
+it does not establish the 99% goal. **τ remains PENDING; all rows route to review.**
+No models were retrained and no Phase 2 official-test evaluation was run.
+[Pilot report](reports/phase2_pilot.md) · [Measured JSON](reports/phase2_pilot.json).
+
 ## Optional transformer experiment (Phase 1)
 
 An independent `distilbert-base-uncased` fine-tuning path is available through

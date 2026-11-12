@@ -1,0 +1,15 @@
+{
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "k": 5,
+  "temperature": 0,
+  "seed": 42,
+  "num_predict": 48,
+  "num_ctx": 4096,
+  "prompt_version": "banking-intent-v1",
+  "schema_version": "canonical-intent-v1",
+  "mechanism": "json_schema",
+  "tau": null
+}
