@@ -233,3 +233,49 @@ full transformer checkpoint also still matches its recorded file checksums.
 test run need explicit later approval of the measured time commitment. This evaluator
 accepts only `--split validation` and only 20-row smoke or 250-row pilot modes; it has
 no official-test or full-validation execution path.
+
+## Approved final protocol (2026-11-13)
+
+The owner approved full validation and one final test evaluation, with the pilot's
+model digest, prompt, k=5, embedding revision and gate structure frozen. The new
+`scripts/finalize_llm.py` is separate from the historical pilot-only evaluator above.
+The pilot configuration file remains unchanged; only the selected finite τ may be
+applied to the final graph.
+
+Full validation must replay all 250 pilot responses through a cache-only provider
+path before making the remaining 1,751 local requests. A cache miss stops without a
+replacement call. All 2,001 rows count toward accuracy, macro F1 and weighted F1.
+
+The predeclared sweep uses unique agreement-subset cosine similarities plus the
+floating-point value immediately below the minimum. The gate remains strict
+`similarity > tau`, so equal-score groups are never split. Eligibility requires at
+least 400 accepted examples and at least 99.0% accepted accuracy. Select maximum
+coverage, breaking ties by lower τ. If none qualify, select highest accuracy, then
+maximum coverage and lower τ, and report the target as **MISSED**. No-agreement
+results select τ=1.0, zero acceptance and unknown accepted accuracy. The receipt
+records the chosen support, accuracy and pointwise Wilson 95% interval; selection
+on the same validation set makes that interval exploratory.
+
+The freeze is exclusively created and fsynced at `reports/llm_freeze.json` before
+official test access. It binds the exact model/configuration, prompt-building AST
+and schema hashes, ordered labels, index/embedding revision, frozen model identities,
+validation report checksum, selected τ, source hashes and committed evaluator SHA.
+At test startup these bindings are verified and an exclusive ignored attempt receipt
+is claimed before reading the official test file. A failed attempt is consumed and
+must be reviewed; there is no automatic retry. The file is read once and checksum
+verified in memory; the same 3,080 rows feed all three paths. The graph's baseline
+predictions also supply the baseline comparison; it is not retrained or separately
+retuned. Public reports contain aggregate metrics and row-set hashes, not support text.
+
+```bash
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
+export LANGCHAIN_TRACING_V2=false LANGSMITH_TRACING=false OTEL_SDK_DISABLED=true
+# Run once after committing the evaluator:
+caffeinate -i .venv/bin/python scripts/finalize_llm.py --stage validation
+# Only after the validation freeze receipt has been written and checked:
+caffeinate -i .venv/bin/python scripts/finalize_llm.py --stage test
+```
+
+These are one-time commands for the approved run, not repeatable benchmark loops.
+No prompt/model changes are permitted after validation results; official test results
+must never be used to change τ. No push, merge or deployment is part of this step.

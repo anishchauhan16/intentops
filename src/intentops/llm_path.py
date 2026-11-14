@@ -1,6 +1,7 @@
 """Bounded, local-only experimental LangGraph; never imported by serving code."""
 
 import json
+import math
 import os
 import re
 from dataclasses import asdict, dataclass
@@ -40,8 +41,10 @@ class LocalConfig:
             raise ValueError("Embedding identity differs from the pinned experiment.")
         if self.seed != 42 or self.temperature != 0 or self.k != 5:
             raise ValueError("Pilot requires seed 42, temperature 0, retrieval k=5.")
-        if self.num_predict != 48 or self.num_ctx != 4096 or self.tau is not None:
-            raise ValueError("Pilot fixes generation bounds and leaves tau PENDING.")
+        if self.num_predict != 48 or self.num_ctx != 4096:
+            raise ValueError("Frozen experiment fixes generation bounds.")
+        if self.tau is not None and not math.isfinite(self.tau):
+            raise ValueError("Selected tau must be finite.")
         if self.mechanism not in {"json_schema", "strict_parser"}:
             raise ValueError("Unknown output mechanism.")
 

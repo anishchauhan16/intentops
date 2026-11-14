@@ -62,7 +62,7 @@ def response(content: str, **changes: Any) -> dict[str, Any]:
         {"temperature": 1},
         {"embedding_revision": "main"},
         {"num_predict": 1000},
-        {"tau": 0.5},
+        {"tau": float("nan")},
         {"mechanism": "other"},
     ],
 )
