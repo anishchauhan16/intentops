@@ -89,8 +89,11 @@ def test_invalid_and_disagreement_rows_never_enter_sweep() -> None:
 
 
 def test_prompt_contract_ignores_tau_but_detects_prompt_or_label_change() -> None:
+    import intentops.llm_path
+
     config = LocalConfig()
     expected = prompt_contract(config, LABELS)
+    assert prompt_contract(config, LABELS, inspect.getsource(intentops.llm_path)) == expected
     assert prompt_contract(replace(config, tau=0.8), LABELS) == expected
     assert prompt_contract(config, list(reversed(LABELS))) != expected
     source = inspect.getsource(build_graph)

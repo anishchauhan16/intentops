@@ -48,9 +48,14 @@ def prompt_contract(
 ) -> dict[str, str]:
     """Hash exact prompt-building AST, schema and canonical label order, excluding tau."""
     tree = ast.parse(source if source is not None else inspect.getsource(build_graph))
-    classify = next(
+    builder = next(
         node
         for node in ast.walk(tree)
+        if isinstance(node, ast.FunctionDef) and node.name == "build_graph"
+    )
+    classify = next(
+        node
+        for node in ast.walk(builder)
         if isinstance(node, ast.FunctionDef) and node.name == "classify"
     )
     assignments = [
