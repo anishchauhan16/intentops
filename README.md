@@ -314,31 +314,48 @@ The encoder is lazy-loaded and uses local cached weights during serving/evaluati
 only the explicit semantic build permits a download. Keep that cache available to
 the serving user. No Sentence Transformer weights are downloaded in tests or CI.
 
-## Optional local LLM/RAG pilot (Phase 2)
+## Optional local LLM/RAG evaluation (Phase 2)
 
 An isolated `.[llm]` experiment adds a bounded LangGraph with Chroma retrieval over
 the 8,002 fitting examples and 77 authored intent descriptions, using pinned local
 MiniLM embeddings and a digest-verified Qwen2.5 7B model through Ollama. It uses no
 hosted inference or API keys. The serving API and deployed demo keep the baseline.
 
-See [setup, data boundaries and reproduction](docs/llm-rag.md). The pilot is limited
-to 250 validation rows after a 20-row latency smoke gate. Similarity threshold τ
-selection, full validation and official-test evaluation require a later approved step.
+The pilot configuration was frozen, full validation used all 2,001 rows (250 cached
+pilot responses plus 1,751 new requests), and only similarity threshold τ was selected.
+The receipt was written before the **single final run on all 3,080 official test rows**.
+The baseline and transformer were loaded, never retrained, and reproduce their
+published accuracies exactly.
 
-Measured exploratory results on the **same 250 validation rows**, covering 77 intents:
-
-| Path | Accuracy | Macro F1 | Weighted F1 |
+| Frozen path | Test accuracy | Macro F1 | Weighted F1 |
 | --- | ---: | ---: | ---: |
-| Frozen baseline | 84.8% | 0.8318 | 0.8363 |
-| Frozen transformer | 88.4% | 0.8754 | 0.8820 |
-| Local LLM/RAG | 90.8% | 0.8977 | 0.9015 |
+| TF-IDF baseline | 87.63% | 0.8772 | 0.8772 |
+| DistilBERT | 88.96% | 0.8885 | 0.8885 |
+| Local LLM/RAG | **92.99%** | **0.9293** | **0.9293** |
 
-The pilot had 230 live calls and 20 response-cache hits, with no invalid outputs.
-Live local end-to-end latency was 2.452 s mean / 3.599 s p95 on Apple M5 / 16 GiB.
-The agreement-only diagnostic was 197/201 correct (98.01%) at 80.4% candidate coverage;
-it does not establish the 99% goal. **τ remains PENDING; all rows route to review.**
-No models were retrained and no Phase 2 official-test evaluation was run.
-[Pilot report](reports/phase2_pilot.md) · [Measured JSON](reports/phase2_pilot.json).
+| Gate at frozen τ = 0.8959192633628845 | Validation | Official test |
+| --- | ---: | ---: |
+| Accepted support | 1,018 / 2,001 | 1,731 / 3,080 |
+| Coverage | 50.87% | 56.20% |
+| Accepted accuracy | 99.0177% | **98.4402%** |
+| Wilson 95% interval | 98.20%–99.47% | 97.74%–98.93% |
+
+Validation met the predeclared >=99% point-accuracy / >=400-support rule at maximum
+eligible coverage. **The 99% accepted-accuracy target did not generalize to test.**
+The prompt and threshold were not changed after seeing test results.
+
+All 3,080 test classifications were live, with zero invalid outputs or provider
+failures and **$0.00 API cost**. On Apple M5 / 16 GiB, live end-to-end mean/p95 was
+1.469/1.983 seconds. The monotonic graph-loop timer records 77.48 minutes, while
+receipt timestamps span 182.61 minutes; the unexplained clock discrepancy is
+documented rather than treating these durations as interchangeable. These are local
+measurements, not production or hosted-API latency claims.
+
+[Final comparison](reports/llm_vs_baseline_transformer.md) ·
+[Measured JSON](reports/llm_vs_baseline_transformer.json) ·
+[Freeze receipt](reports/llm_freeze.json) ·
+[Setup, method and limitations](docs/llm-rag.md) ·
+[Historical pilot](reports/phase2_pilot.md).
 
 ## Optional transformer experiment (Phase 1)
 

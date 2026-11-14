@@ -1,10 +1,67 @@
-# Phase 2: local LangGraph and retrieval pilot
+# Phase 2: local LangGraph and retrieval evaluation
 
 This is an optional, local experiment on Apple M5 / 16 GiB unified memory. It does
 not change the baseline API, demo, transformer path, Docker image or Render deployment.
 No hosted inference, API keys, paid services or API usage ledger are used. API cost is
 **$0.00**; local compute, electricity, disk space and download bandwidth are not free
 resources. No hosted-API exception to AGENTS.md applies.
+
+## Final measured outcome
+
+The frozen pilot configuration completed full validation and a single final official
+test evaluation. Only τ was selected on validation; no model was retrained and no
+prompt/configuration was retuned using test results. The 250 pilot responses were
+verified cache hits and the remaining 1,751 validation requests were live. Every
+test classification was live (3,080 calls, no response-cache hits).
+
+| Path | Validation accuracy | Macro F1 | Weighted F1 | Test accuracy | Macro F1 | Weighted F1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Frozen baseline | 87.2564% | 0.874325 | 0.872686 | 87.6299% | 0.877201 | 0.877201 |
+| Frozen transformer | 89.9050% | 0.893909 | 0.899004 | 88.9610% | 0.888488 | 0.888488 |
+| Local LLM/RAG | 92.1539% | 0.923046 | 0.922085 | 92.9870% | 0.929340 | 0.929340 |
+
+The baseline and transformer reproduce their published 87.63% / 88.96% test accuracy
+exactly. The selected threshold is **τ = 0.8959192633628845**. Validation accepted
+1,018/2,001 rows (50.8746% coverage), with 1,008 correct: **99.0177% accepted accuracy**,
+Wilson 95% **98.2013%–99.4656%**. It maximizes coverage among eligible thresholds
+under the predeclared >=99% accuracy / >=400-support rule. The validation target
+status is **MET**, using point accuracy rather than a confidence lower bound.
+
+On the independent test, the same frozen τ accepted 1,731/3,080 rows (56.2013%
+coverage), with 1,704 correct: **98.4402% accepted accuracy**, Wilson 95%
+**97.7401%–98.9258%**. **The 99% accepted-accuracy target did not generalize to test.**
+The threshold and prompt were left unchanged. There were zero invalid outputs,
+provider failures or unknown token fields in both full validation and test.
+
+On Apple M5 / 16 GiB, test live retrieval mean/p95 was 0.0101/0.0202 s,
+LLM/cache-write 1.4513/1.9600 s, and end-to-end 1.4689/1.9826 s. The 3,080 calls
+returned 4,190,788 prompt-evaluation tokens, 30,778 generated tokens and 3,153,605
+cached-prompt tokens as reported by Ollama. Prefix-cache counts are distinct from
+response-cache hits. API cost was **$0.00**, not a statement about electricity cost.
+
+The test monotonic graph-loop duration (`perf_counter`) is 4,648.667 s (77.48 min),
+and monotonic overall duration including setup/comparisons is 4,661.695 s (77.69 min).
+However, the completed attempt's timestamps span **10,956.575 s (182.61 min)**.
+Suspension/clock-adjustment status was not captured and the cause is unverified;
+these measurements must not be presented as equivalent calendar elapsed time.
+Validation records 3,731.791 s monotonic graph-loop and 3,744.560 s overall; an exact
+absolute validation start timestamp was not captured, so its calendar duration is
+PENDING. Local per-request latencies are not production SLAs or hosted API timings.
+
+The evaluator was committed as `07fc76e4f747ea17cf104651b0616403c64b2eaf` before
+validation. The freeze receipt predates test access and binds that commit, prompt
+and schema hashes, model digest, k, embedding revision and τ. The completed ignored
+attempt receipt remains unchanged. Its original export checksum is verifiable
+against ignored `reports/llm-runs/final-test/export-at-completion.json`; the public
+comparison adds a post-run clock audit without changing results or configuration.
+
+Final local verification: **133 tests passed**, **98.34%** branch-aware coverage;
+Ruff, format checks and mypy passed. The base environment without torch, LangGraph
+or Chroma passes **126 tests**, skips seven optional tests, and reaches **86.32%**
+coverage; its mypy check passes. All frozen evaluator source hashes still match the
+receipt. All 42 original tracked source/script/test/deployment/artifact files remain
+byte-identical to `e933d0c`, and the ignored transformer checkpoint still matches its
+recorded checksums. No datasets, indexes, caches or model binaries are committed.
 
 ## Fixed model identities
 
@@ -74,15 +131,15 @@ truncated responses yield `intent=null` and human review. They remain in all qua
 denominators. An invalid prediction is a false negative for its true canonical class;
 macro and weighted F1 use the same 77-label set. Nothing is silently remapped.
 
-## Gate and pilot scope
+## Gate and historical pilot scope
 
 Acceptance requires a valid LLM label agreeing with both the frozen baseline and the
 nearest retrieved fitting label, with nearest cosine similarity **greater than τ**.
-The eventual validation objective is to explore 99% accepted accuracy while reporting
+The validation objective was to explore 99% accepted accuracy while reporting
 coverage, support and uncertainty. No LLM self-reported confidence is used.
 
-**τ is PENDING and is not selected in this pilot.** All pilot rows therefore route to
-review. The report separately shows agreement-only candidate support, coverage,
+**τ was PENDING during the pilot.** All pilot rows therefore routed to review.
+The historical pilot report separately shows agreement-only candidate support, coverage,
 accuracy, similarity diagnostics and a 95% Wilson interval. These are diagnostics,
 not a demonstrated operating point or a 99% guarantee.
 
@@ -92,10 +149,10 @@ for this smoke run. Its mean live end-to-end latency must be at most 10 seconds
 before the 250-row pilot can start. Pilot sampling uses the same quota method, covers
 all 77 intents, and records row IDs and SHA-256 hashes without exporting support text.
 
-The frozen baseline, frozen transformer and LLM/RAG path are evaluated on exactly
-the same 250 validation examples. Neither existing model is retrained. All quality
-comparisons are specific to this exploratory sample; no tuning or full-validation
-quality claim follows from it. The official 3,080-row test split is not opened.
+The frozen baseline, frozen transformer and LLM/RAG path were evaluated on exactly
+the same 250 pilot validation examples, without retraining. Those quality comparisons
+apply only to that exploratory sample. The official test split remained unopened
+until the separately approved final protocol below, after full validation and freeze.
 
 ## Setup and reproduction
 
@@ -159,6 +216,10 @@ use a fresh ignored cache directory when deliberately measuring new live calls.
 
 ## Evidence and compute accounting
 
+- [Final three-way comparison](../reports/llm_vs_baseline_transformer.md)
+- [Full final evidence and clock audit](../reports/llm_vs_baseline_transformer.json)
+- [Pre-test freeze receipt](../reports/llm_freeze.json)
+- [Full validation and exhaustive threshold sweep](../reports/llm_full_validation.json)
 - [20-row smoke report](../reports/phase2_smoke.md)
 - [250-row pilot report](../reports/phase2_pilot.md)
 - [Machine-readable pilot evidence](../reports/phase2_pilot.json)
@@ -187,7 +248,7 @@ Projected full-validation (2,001 rows) and final-test (3,080 rows) times multipl
 mean and p95 by each row count. This is a planning range, not a confidence interval
 on total time, and excludes setup, pauses, cache hits and future thermal/load changes.
 
-## Offline verification and stop boundary
+## Historical pilot and offline verification
 
 The measured pilot completed on Apple M5 / 16 GiB, with CPU MiniLM/DistilBERT and
 local Ollama. Ollama reported 4,755,397,016 bytes of GPU-resident model memory and
@@ -204,10 +265,12 @@ these raw fields are preserved rather than reinterpreted as billed usage.
 There were zero invalid outputs or provider failures and no unknown usage fields.
 
 Agreement-only support was 201/250 (80.4%), with 197/201 correct (98.01%; 95% Wilson
-interval 95.00%–99.22%). Operational acceptance remains zero because τ is PENDING.
-At the measured live mean/p95, a new 2,001-row validation pass projects to
+interval 95.00%–99.22%). Pilot operational acceptance was zero because τ was PENDING.
+At the pilot's measured live mean/p95, a new 2,001-row validation pass projected to
 81.78–120.02 minutes, and a 3,080-row final-test pass to 125.88–184.74 minutes.
-Neither projected run was performed. Baseline/transformer weights were loaded only.
+Neither projected run had been performed at that point. The later approved final
+measurements above supersede those time projections; baseline/transformer weights
+were loaded only.
 
 ```bash
 python -m ruff check .
@@ -221,7 +284,7 @@ transports. They never download weights or run/call an Ollama server. The option
 `llm-offline-tests` CI job installs the extra, with model downloads disabled for tests.
 CI is prepared locally; this phase does not push, publish or deploy anything.
 
-Final local verification: **122 passed** (all 88 prior tests plus 34 new tests),
+Pilot local verification: **122 passed** (all 88 prior tests plus 34 new tests),
 **98.31%** branch-aware coverage. The base environment without torch, LangGraph or
 Chroma passes **115 tests**, skips seven optional tests, and reaches **84.95%**
 coverage. Ruff, formatting checks and mypy pass; mypy also passes in that base
@@ -229,10 +292,10 @@ environment. All 42 existing tracked source/script/test/deployment/artifact file
 were compared byte-for-byte against `e933d0c` and remain unchanged. The ignored
 full transformer checkpoint also still matches its recorded file checksums.
 
-**Stop after the pilot.** Full validation, τ selection and the single final official
-test run need explicit later approval of the measured time commitment. This evaluator
-accepts only `--split validation` and only 20-row smoke or 250-row pilot modes; it has
-no official-test or full-validation execution path.
+The original pilot stopped for approval. `scripts/evaluate_llm.py` still accepts only
+validation smoke/pilot modes. The final step used the separately guarded evaluator
+below. Its one-shot test attempt is now consumed; do not rerun it or use test results
+to alter the prompt, configuration or threshold.
 
 ## Approved final protocol (2026-11-13)
 
@@ -270,9 +333,9 @@ retuned. Public reports contain aggregate metrics and row-set hashes, not suppor
 ```bash
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 export LANGCHAIN_TRACING_V2=false LANGSMITH_TRACING=false OTEL_SDK_DISABLED=true
-# Run once after committing the evaluator:
+# Historical approved command: already completed; do not rerun this experiment.
 caffeinate -i .venv/bin/python scripts/finalize_llm.py --stage validation
-# Only after the validation freeze receipt has been written and checked:
+# Historical one-shot command: completed receipt prevents another attempt.
 caffeinate -i .venv/bin/python scripts/finalize_llm.py --stage test
 ```
 

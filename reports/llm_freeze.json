@@ -1,0 +1,97 @@
+{
+  "created_at": "2026-11-14T03:19:07.902143+00:00",
+  "code_commit": "07fc76e4f747ea17cf104651b0616403c64b2eaf",
+  "source_sha256": {
+    "src/intentops/llm_path.py": "499403067e0eecb9b1fe57dfd1af88d2bd1230a2edb5eadb84d00bb17912bfd9",
+    "src/intentops/llm_cache.py": "b18f292f35b9779126170b53cc7c16f59d84ee6116ba3a161454c9d28736ffe5",
+    "src/intentops/llm_evaluation.py": "076631d4afeef10c9b7b752dd9f68e819873df48b846d35d102ba2fd57c7266d",
+    "src/intentops/llm_final.py": "7283fce5f98e1bf3a05455ea62320cfae00d78e436ce5a4487426c526f804c88",
+    "scripts/finalize_llm.py": "5d6f1a7488560d90b7513568cdd22f3ab16c77161ed95c0e67a8953313e7f604",
+    "configs/llm-pilot.json": "ec94849f16ac36395b37fef1eeeade5f3b523da685e8e4ed54087272050bef07",
+    "configs/intent-descriptions-v1.json": "a822cdf94611efe59d497eee53b4952066676b70f88eb0cef0dd850cfa4c67ee",
+    "src/intentops/model.py": "f6aefa6e070c5de63ed255786c567d83c68ec11dca3399997cb4ecad68f7794d",
+    "src/intentops/data.py": "965cf97b958f61e9417f6d603cc4eae26efc54ec68280b00426731d67571116e",
+    "src/intentops/config.py": "d01f105585063938bbb4fb1ca4ad9f974f7c719fc0a9d44642f1a175a21bc996",
+    "src/intentops/transformer_model.py": "e6eda51e4d176babf179d5e893a0562185d6b6203f930f4738247756793ae9c7",
+    "pyproject.toml": "8a57ff6815d04458aefa551ae0ca6879a027b591a7860c258d412fec3ea311e3"
+  },
+  "pilot_configuration": {
+    "model": "qwen2.5:7b-instruct-q4_K_M",
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "k": 5,
+    "temperature": 0,
+    "seed": 42,
+    "num_predict": 48,
+    "num_ctx": 4096,
+    "prompt_version": "banking-intent-v1",
+    "schema_version": "canonical-intent-v1",
+    "mechanism": "json_schema",
+    "tau": null
+  },
+  "configuration": {
+    "model": "qwen2.5:7b-instruct-q4_K_M",
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "k": 5,
+    "temperature": 0,
+    "seed": 42,
+    "num_predict": 48,
+    "num_ctx": 4096,
+    "prompt_version": "banking-intent-v1",
+    "schema_version": "canonical-intent-v1",
+    "mechanism": "json_schema",
+    "tau": 0.8959192633628845
+  },
+  "prompt_sha256": "ac089cbf7f50b4f47d45aadf98a463f9bf6227a731452aa89b803449e31f27d9",
+  "schema_sha256": "a01b05c41d2d6155bcf1786cbd046b19be646ce39b5ea15f9d93d7db1cb25c16",
+  "ordered_labels_sha256": "c58d358f5f35717d0b4fc45f76d3dae3e256a4fb1a084c1e841c89904d6733e6",
+  "index_binding": {
+    "version": 1,
+    "baseline_sha256": "c8f5bc42f4b07bd5c49e71263059d0742e967cbcdbb750842a32868c8910e595",
+    "manifest_sha256": "56d457dd2b24b254e9230d63e72e555d743bb357824c0baedea56b846a85810a",
+    "train_sha256": "1e0ebab3a6859489258f8473fd2406d030d9bbf95ac2f6571ccb1509c196abf5",
+    "ordered_labels_sha256": "c58d358f5f35717d0b4fc45f76d3dae3e256a4fb1a084c1e841c89904d6733e6",
+    "fitting_ids_sha256": "cd1fab1a3b60b417f1fba3d4fc37a06f98cf72b1157c55cd7fbd57e45b6a195e",
+    "description_sha256": "a822cdf94611efe59d497eee53b4952066676b70f88eb0cef0dd850cfa4c67ee",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "distance": "cosine",
+    "fitting_rows": 8002,
+    "description_rows": 77
+  },
+  "models": {
+    "baseline_version": "baseline-c8f5bc42f4b0",
+    "baseline_sha256": "c8f5bc42f4b07bd5c49e71263059d0742e967cbcdbb750842a32868c8910e595",
+    "transformer_version": "transformer-ee3848a11aaf",
+    "transformer_metadata_sha256": "65afdb3b6f682e58d49939f5196fb9eacd19af4c760e2b1fa5bf097a128693a6",
+    "transformer_sha256": "ee3848a11aaf3582ecb5ea6b23281302db8330ab82723c467f86146c5e586c0d"
+  },
+  "selection": {
+    "rule": {
+      "eligibility": "accepted correct/support >= 0.99 AND support >= 400",
+      "eligible_order": "maximum coverage, then lower tau",
+      "fallback_order": "maximum accuracy, then maximum coverage, then lower tau; target MISSED",
+      "grid": "unique agreement similarities plus nextafter(minimum,-inf); strict similarity > tau",
+      "empty_agreement": "tau=1.0; zero accepted; accuracy null; target MISSED"
+    },
+    "target_status": "MET",
+    "eligible_thresholds": 613,
+    "chosen": {
+      "tau": 0.8959192633628845,
+      "support": 1018,
+      "correct": 1008,
+      "review_support": 983,
+      "coverage": 0.5087456271864068,
+      "accepted_accuracy": 0.9901768172888016,
+      "wilson_95": [
+        0.9820125425906427,
+        0.9946556003831122
+      ]
+    }
+  },
+  "validation_report_sha256": "e02ccfb58858a42fbb6f30cd90caaec6e9e1185d115845485a7117f7ec3c7457",
+  "note": "Written and fsynced before any official test file access."
+}
