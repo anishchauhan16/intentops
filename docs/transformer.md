@@ -25,8 +25,9 @@ calibrated. All examples, including reviewed ones, count toward overall metrics.
 
 ## Environment and installation
 
-Work in the Git checkout (`demo-release/` in the original workspace), on
-`feat/transformer-path`. Do not initialize Git at its parent workspace.
+Work in the Git checkout (`demo-release/` in the original workspace). Phase 1 was
+squash-merged into `main` in PR #1; its feature branch was deleted. Do not initialize
+Git at the parent workspace.
 
 ```bash
 python3.11 -m venv .venv
@@ -228,8 +229,9 @@ accuracy gain support keeping the smaller baseline in the live demo for now.
 The separate smoke run also completed end to end. All **88 offline tests** pass,
 including all 71 existing tests, with **98.62% branch-aware coverage**; Ruff, format
 checks and mypy pass. The base environment without torch/transformers passes 83 tests
-and skips only five dependency-specific tests. The new optional CI job is prepared;
-no remote push or hosted run of this feature branch was performed.
+and skips only five dependency-specific tests. Both feature-branch CI runs passed
+before PR #1 was squash-merged as `e933d0c`; the subsequent main CI run also passed:
+https://github.com/anishchauhan16/intentops/actions/runs/42957332509.
 
 There are no pending training/test runs for this recorded experiment. Baseline training
 time/hardware remain PENDING by design. Future experiments need a new development plan;

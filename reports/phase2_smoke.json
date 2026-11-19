@@ -1,0 +1,201 @@
+{
+  "status": "SMOKE_GATE_PASSED",
+  "split": "validation",
+  "rows": 20,
+  "represented_classes": 20,
+  "sampling": "proportional quotas, seed 42; 20 rows cannot cover 77 labels",
+  "configuration": {
+    "model": "qwen2.5:7b-instruct-q4_K_M",
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "k": 5,
+    "temperature": 0,
+    "seed": 42,
+    "num_predict": 48,
+    "num_ctx": 4096,
+    "prompt_version": "banking-intent-v1",
+    "schema_version": "canonical-intent-v1",
+    "mechanism": "json_schema",
+    "tau": null
+  },
+  "configuration_sha256": "e862e9fbabc70c1182210ffe84e6b7a2638c64589a9f90abb46502fcfbf7263c",
+  "index_binding": {
+    "version": 1,
+    "baseline_sha256": "c8f5bc42f4b07bd5c49e71263059d0742e967cbcdbb750842a32868c8910e595",
+    "manifest_sha256": "56d457dd2b24b254e9230d63e72e555d743bb357824c0baedea56b846a85810a",
+    "train_sha256": "1e0ebab3a6859489258f8473fd2406d030d9bbf95ac2f6571ccb1509c196abf5",
+    "ordered_labels_sha256": "c58d358f5f35717d0b4fc45f76d3dae3e256a4fb1a084c1e841c89904d6733e6",
+    "fitting_ids_sha256": "cd1fab1a3b60b417f1fba3d4fc37a06f98cf72b1157c55cd7fbd57e45b6a195e",
+    "description_sha256": "a822cdf94611efe59d497eee53b4952066676b70f88eb0cef0dd850cfa4c67ee",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "distance": "cosine",
+    "fitting_rows": 8002,
+    "description_rows": 77
+  },
+  "provenance": {
+    "dataset_name": "PolyAI/banking77",
+    "manifest_sha256": "56d457dd2b24b254e9230d63e72e555d743bb357824c0baedea56b846a85810a",
+    "dataset_checksums": {
+      "train": "1e0ebab3a6859489258f8473fd2406d030d9bbf95ac2f6571ccb1509c196abf5",
+      "test": "74cef2827231e1180b20d69942b24c45f48956ae5577719ba8d6f94d1704da50"
+    },
+    "source_revision": "57ec275d8078af65b7731c2a98be812d844a6d6b",
+    "label_revision": "90d4e2e",
+    "official_development_rows": 10003,
+    "development_training_rows": 8002,
+    "development_validation_rows": 2001,
+    "training_rows": 8002,
+    "validation_rows": 2001,
+    "validation_size": 0.2,
+    "baseline_sha256": "c8f5bc42f4b07bd5c49e71263059d0742e967cbcdbb750842a32868c8910e595"
+  },
+  "row_ids": [
+    5711,
+    2758,
+    6350,
+    9326,
+    8804,
+    3586,
+    726,
+    3370,
+    2461,
+    7301,
+    5521,
+    8650,
+    5059,
+    8211,
+    2545,
+    5177,
+    9419,
+    4800,
+    6815,
+    552
+  ],
+  "row_hashes": [
+    "684ab785ea2ffe53c5311ac08790f0595a708de41b0b3060d670eeea212185e7",
+    "92f782c1166285d6b24afc683c82acf6bf36fd935c4292a43eb8581526aff881",
+    "ebf6e7e3cf1dd14f116fabfb779db55e9cd1b4c816a0ead721e56b9cb0517485",
+    "9f42407149daea4e0d1b15350fc243bf7eda00f37b35e979d534d657d66b1bc5",
+    "729ca39d7cf8f5ffdf2a35e6e0914ce34309fdd858be40d096a637e35e373a4e",
+    "8b611cd2f23c8f473c8af0702ea2582499f64fc29b1303aacde0b991b67e653a",
+    "7fd59521df6ac5128bba7db04ff9b0d35f79d7f71088aeab3b42cd9889270c87",
+    "89c27cf50036e2e814651eb844daf1a5af230817ab17c400ef4e8b6b61b37c68",
+    "2cf2f110b60a2ea1558b29faaf7754c210f5a8b4168e5dfd8cc8a68c2f1a2a7c",
+    "4a256aab042aa72f4e387f0ddb11de4d402bd49920040665c974d4a0c2c6500d",
+    "e413f3a3df1fdeca76c801842f588ec34731e1fd712d7ad71a4b6538dd76ca73",
+    "d39122ce7fc2dfbcf5fa5854782d8f11b327a0eafaf31080e638971ae4ba02c0",
+    "03778b29a3970504d7693f4e8f9a4707333cafd09845d6317f635415615992d8",
+    "470c923d39fd453215c2b97076aa55895d38d9b02f25195d8b2d84996de75972",
+    "b889fc5a41dd8230d6892edf4e4e8064d8253628be1e18b195b97a9bd9b36196",
+    "0f45ba4b289a98a1b894db7eec26dcbee5862e9e091088e39a504434e0237003",
+    "4658f849c05af6229a10ef4b92a962808df14c063bd39943145245c0cbba7b41",
+    "d59db43b83e62bd5b5dffdf24d6adb9437d2ea4db2848759f281e73b16330a41",
+    "f03bf66731c010ebae874485269937a8ebf172d349a7e1055bf124f2bdb3087a",
+    "d3132e1775fab42827cedb3fd129e863eaaf8a78badf817db0ab1b10175a36aa"
+  ],
+  "sample_sha256": "5d9ee81c520952f98a357aae957c3c52514a2f75f3974cdb2b49fc8d225b2b50",
+  "invalid_output_count": 0,
+  "failure_count": 0,
+  "compute": {
+    "api_cost_usd": 0.0,
+    "total_wall_seconds": 30.32074062502943,
+    "timing_scope": "sequential local batch=1; graph includes identity verification, retrieval, baseline, LLM HTTP and cache I/O; initialization excluded; first live load is included; ledger writes included only in total wall time; cache-hit token totals are historical",
+    "live": {
+      "rows": 20,
+      "latency": {
+        "retrieval": {
+          "examples": 20,
+          "mean_seconds": 0.034000666660722344,
+          "p95_seconds": 0.1376576895359904
+        },
+        "baseline": {
+          "examples": 20,
+          "mean_seconds": 0.0018265664926730095,
+          "p95_seconds": 0.005122204020153733
+        },
+        "llm": {
+          "examples": 20,
+          "mean_seconds": 1.4698868247796781,
+          "p95_seconds": 1.7215988166048226
+        },
+        "end_to_end": {
+          "examples": 20,
+          "mean_seconds": 1.5138186500989832,
+          "p95_seconds": 1.761692931631118
+        }
+      },
+      "tokens": {
+        "prompt_eval_count": {
+          "known_total": 27501,
+          "unknown_rows": 0
+        },
+        "eval_count": {
+          "known_total": 225,
+          "unknown_rows": 0
+        },
+        "prompt_eval_cached_count": {
+          "known_total": 19418,
+          "unknown_rows": 0
+        }
+      }
+    },
+    "cache_hits": {
+      "rows": 0,
+      "latency": {
+        "retrieval": {
+          "examples": 0,
+          "mean_seconds": null,
+          "p95_seconds": null
+        },
+        "baseline": {
+          "examples": 0,
+          "mean_seconds": null,
+          "p95_seconds": null
+        },
+        "llm": {
+          "examples": 0,
+          "mean_seconds": null,
+          "p95_seconds": null
+        },
+        "end_to_end": {
+          "examples": 0,
+          "mean_seconds": null,
+          "p95_seconds": null
+        }
+      },
+      "tokens": {
+        "prompt_eval_count": {
+          "known_total": 0,
+          "unknown_rows": 0
+        },
+        "eval_count": {
+          "known_total": 0,
+          "unknown_rows": 0
+        },
+        "prompt_eval_cached_count": {
+          "known_total": 0,
+          "unknown_rows": 0
+        }
+      }
+    }
+  },
+  "smoke_gate_passed": true,
+  "hardware": {
+    "platform": "macOS-26.6-arm64-arm-64bit",
+    "processor": "Apple M5",
+    "ram_gb": 16,
+    "embedding_device": "cpu",
+    "ollama_version": "0.40.16"
+  },
+  "runtime": {
+    "langgraph": "1.2.20",
+    "chromadb": "1.5.9",
+    "sentence-transformers": "5.7.0",
+    "torch": "2.15.0",
+    "transformers": "4.57.6",
+    "httpx": "0.28.1"
+  },
+  "note": "No smoke accuracy/F1 is computed or reported; this is a latency/format gate only."
+}

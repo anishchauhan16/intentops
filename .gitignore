@@ -17,3 +17,7 @@ reports/transformer/
 *.pt
 *.pth
 *.bin
+artifacts/llm*/
+reports/llm-runs/
+*.gguf
+*.onnx
